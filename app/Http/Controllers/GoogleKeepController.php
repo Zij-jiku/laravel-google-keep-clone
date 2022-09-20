@@ -70,7 +70,7 @@ class GoogleKeepController extends Controller
      */
     public function update(Request $request, GoogleKeep $googleKeep)
     {
-        //
+        return $googleKeep;
     }
 
     /**
@@ -81,13 +81,10 @@ class GoogleKeepController extends Controller
      */
     public function destroy(GoogleKeep $googleKeep)
     {
-       echo 'hello';
-    //    dd($googleKeep);
-        // if ($googleKeep) {
-        //     $googleKeep->delete();
-        //     session()->flash('success', 'GoogleKeep has been deleted successfully !');
-        // }
-
-        // return back();
+        if ($googleKeep) {
+            $googleKeep->delete();
+            session()->flash('success', 'GoogleKeep has been deleted successfully !');
+        }
+        return back();
     }
 }

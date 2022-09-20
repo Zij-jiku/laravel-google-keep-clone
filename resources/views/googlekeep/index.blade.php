@@ -10,7 +10,7 @@
                 </h2>
 
                 {{-- start --}}
-                <form action="{{ route('googlekeep.store') }}" method="POST">
+                <form action="{{ route('google-keep.store') }}" method="POST">
                     @csrf
 
                     @include('partials.messages')
@@ -35,7 +35,7 @@
 
                     <div class="mb-3">
                         <label for="note" class="form-label">Note</label>
-                        <textarea class="form-control" id="note" name="note" rows="3" value="{{ old('note') }}"></textarea>
+                        <textarea class="form-control" id="note" name="note" rows="3">{{ old('note') }}</textarea>
                     </div>
 
                     <div class="mb-3">
@@ -83,8 +83,11 @@
                                         <p class="card-text">{{ $googlekeep->note }}</p>
 
                                         <div>
-                                            <a class="btn btn-success btn-sm"
-                                                href="{{ route('googlekeep.edit', $googlekeep->id) }}">Edit</a>
+                                            <a class="btn btn-primary btn-sm ml-2" data-bs-toggle="modal"
+                                                href="#editModal{{ $googlekeep->id }}">
+                                                Edit
+                                            </a>
+
                                             <a class="btn btn-danger btn-sm ml-2" data-bs-toggle="modal"
                                                 href="#deleteModal{{ $googlekeep->id }}">
                                                 Delete
@@ -115,7 +118,7 @@
                                         </p>
                                     </div>
                                     <div class="modal-footer">
-                                        <form action="{{ route('googlekeep.destroy', $googlekeep->id) }}" method="POST">
+                                        <form action="{{ route('google-keep.destroy', $googlekeep->id) }}" method="POST">
                                             @csrf
                                             @method('delete')
                                             <button type="button" class="btn btn-secondary"
@@ -126,11 +129,60 @@
                                 </div>
                             </div>
                         </div>
-
-
                         {{-- Model View Edit --}}
 
 
+                        {{-- model view Delete --}}
+                        <div class="modal fade" id="editModal{{ $googlekeep->id }}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModal{{ $googlekeep->id }}Label"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModal{{ $googlekeep->id }}Label">Are you sure ?
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{-- start --}}
+                                        <form action="{{ route('google-keep.update',$googlekeep->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <div class="mb-3">
+                                                <label for="category" class="form-label">Edit Note</label>
+                                                <select name="category_id" id="category" class="form-control">
+                                                    <option disabled>--Select Category--</option>
+                                                    @foreach ($categories as $category)
+                                                        <option {{ $category->category_name === $googlekeep->category->category_name ? 'selected' : '' }}  value="{{ $category->id }}">
+                                                            {{ $category->category_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="title" class="form-label">Title</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                    placeholder="Write task title" value="{{ $googlekeep->title }}">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="note" class="form-label">Note</label>
+                                                <textarea class="form-control" id="note" name="note" rows="3">{{ $googlekeep->note }}</textarea>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                        </form>
+                                        {{-- end --}}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Model View Edit --}}
                     @endforeach
 
                 </div>
