@@ -45,8 +45,8 @@ class GoogleKeepController extends Controller
         $googlekeep->status = 'active';
         $googlekeep->save();
 
-        // // Redirect with flash
-        session()->flash('success', 'Category has been created successfully !');
+        // Redirect with flash
+        session()->flash('success_note_status', 'Category has been created successfully !');
         return redirect()->route('index');
     }
 
@@ -68,9 +68,17 @@ class GoogleKeepController extends Controller
      * @param  \App\Models\GoogleKeep  $googleKeep
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, GoogleKeep $googleKeep)
+    public function update(GoogleKeepRequest $request, GoogleKeep $googleKeep)
     {
-        return $googleKeep;
+        $id =  $googleKeep->id;
+        GoogleKeep::where('id' , $id)->update([
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'note' => $request->note,
+        ]);
+        // Redirect with flash
+        session()->flash('note_update', 'Note Update successfully !');
+        return redirect()->route('index');
     }
 
     /**
@@ -83,7 +91,7 @@ class GoogleKeepController extends Controller
     {
         if ($googleKeep) {
             $googleKeep->delete();
-            session()->flash('success', 'GoogleKeep has been deleted successfully !');
+            session()->flash('note_delete', 'Note has been deleted!');
         }
         return back();
     }

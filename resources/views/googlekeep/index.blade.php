@@ -3,6 +3,11 @@
 @section('content')
     <div class="container-fluid">
 
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                @include('partials.messages')
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <h2 class="my-3">
@@ -12,8 +17,6 @@
                 {{-- start --}}
                 <form action="{{ route('google-keep.store') }}" method="POST">
                     @csrf
-
-                    @include('partials.messages')
                     <div class="mb-3">
                         <label for="category" class="form-label">Note Category
                             <a class="btn btn-primary btn-sm mx-4" href="{{ route('categories.create') }}">(+ Category
@@ -49,17 +52,16 @@
             </div>
 
             <div class="col-md-8">
-
                 <div class="row">
-
                     <div class="row my-3">
                         <div class="col-md-12">
                             <h2>Category</h2>
                         </div>
                         <div class="col-12 col-md-6">
+                            <a href="{{ url('/') }}" class="btn btn-success">All</a>
                             @foreach ($categories as $category)
                                 <a href="{{ url('category/search', $category->id) }}"
-                                    class="btn btn-primary">{{ $category->category_name }}</a>
+                                    class="btn btn-success">{{ $category->category_name }}</a>
                             @endforeach
                         </div>
                     </div>
@@ -170,6 +172,17 @@
                                             <div class="mb-3">
                                                 <label for="note" class="form-label">Note</label>
                                                 <textarea class="form-control" id="note" name="note" rows="3">{{ $googlekeep->note }}</textarea>
+                                            </div>
+
+
+                                            <div class="mb-3">
+                                                <label for="status" class="form-label">Edit Note</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option disabled>--Select Status--</option>
+                                                    <option value="active" {{ $googlekeep->status === 'active' ? 'selected' : '' }}> Active</option>
+                                                    <option value="pending" {{ $googlekeep->status === 'pending' ? 'selected' : '' }}> Pending </option>
+                                                    
+                                                </select>
                                             </div>
 
                                             <button type="button" class="btn btn-secondary"
