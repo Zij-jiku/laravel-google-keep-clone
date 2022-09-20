@@ -46,7 +46,7 @@ class GoogleKeepController extends Controller
         $googlekeep->save();
 
         // Redirect with flash
-        session()->flash('success_note_status', 'Category has been created successfully !');
+        session()->flash('success_note_status', 'Note has been created successfully !');
         return redirect()->route('index');
     }
 
@@ -75,6 +75,7 @@ class GoogleKeepController extends Controller
             'category_id' => $request->category_id,
             'title' => $request->title,
             'note' => $request->note,
+            'status' => $request->status,
         ]);
         // Redirect with flash
         session()->flash('note_update', 'Note Update successfully !');
